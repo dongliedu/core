@@ -3,6 +3,7 @@
  * @author Morris Jobke <hey@morrisjobke.de>
  * @author Robin Appelman <icewind@owncloud.com>
  * @author Thomas Müller <thomas.mueller@tmit.eu>
+ * @author Piotr Mrowczynski <piotr@owncloud.com>
  *
  * @copyright Copyright (c) 2017, ownCloud GmbH
  * @license AGPL-3.0
@@ -37,16 +38,23 @@ class QueryLogger implements IQueryLogger {
 	protected $queries = [];
 
 	/**
+	 * @var bool - Module needs to be enabled by some app
+	 */
+	private $activated = false;
+	
+	/**
 	 * @param string $sql
 	 * @param array $params
 	 * @param array $types
 	 */
 	public function startQuery($sql, array $params = null, array $types = null) {
-		$this->activeQuery = new Query($sql, $params, microtime(true));
+		if ($this->activated) {
+			$this->activeQuery = new Query($sql, $params, microtime(true));
+		}
 	}
 
 	public function stopQuery() {
-		if ($this->activeQuery) {
+		if ($this->activated && $this->activeQuery) {
 			$this->activeQuery->end(microtime(true));
 			$this->queries[] = $this->activeQuery;
 			$this->activeQuery = null;
@@ -58,5 +66,12 @@ class QueryLogger implements IQueryLogger {
 	 */
 	public function getQueries() {
 		return $this->queries;
+	}
+
+	/**
+	 * @param bool - $activate
+	 */
+	public function activate($activate) {
+		$this->activated = $activate;
 	}
 }

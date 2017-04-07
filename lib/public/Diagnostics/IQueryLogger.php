@@ -50,4 +50,12 @@ interface IQueryLogger extends SQLLogger {
 	 * @since 8.0.0
 	 */
 	public function getQueries();
+
+	/**
+	 * Activating/Deactivating of this module
+	 *
+	 * @param bool - $activate
+	 * @since 10.0.0
+	 */
+	public function activate($activate);
 }

@@ -60,4 +60,12 @@ interface IEventLogger {
 	 * @since 8.0.0
 	 */
 	public function getEvents();
+
+	/**
+	 * Activating/Deactivating of this module
+	 *
+	 * @param bool - $activate
+	 * @since 10.0.0
+	 */
+	public function activate($activate);
 }
